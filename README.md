@@ -2,6 +2,8 @@
 
 ## Overview
 
+[![Python application test](https://github.com/ShaunThomas1/cisc327-library-management-a2-4188/actions/workflows/python-app.yml/badge.svg)](https://github.com/ShaunThomas1/cisc327-library-management-a2-4188/actions/workflows/python-app.yml)
+
 This project contains a partial implementation of a Flask-based Library Management System with SQLite database, designed for CISC 327 (Software Quality Assurance) coursework.
 
 Students are provided with:
