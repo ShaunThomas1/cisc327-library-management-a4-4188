@@ -1,0 +1,14 @@
+# virtual environment
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+#SQlite database
+*.db
+
+# --- Documents and reports (to keep submission clean) ---
+*.pdf
+*.docx
