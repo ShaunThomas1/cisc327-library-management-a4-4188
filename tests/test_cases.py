@@ -91,12 +91,14 @@ def test_catalog_not_empty(mocker):
         {"id": 1, "title": "A Book", "author": "X", "isbn": "123", "total_copies": 3, "available_copies": 2}
     ]
 
-    # Patch all possible references to get_all_books()
+    # Patch ALL references
     mocker.patch("services.library_service.get_all_books", return_value=fake_books)
-    mocker.patch("tests.test_cases.get_all_books", return_value=fake_books)
     mocker.patch("database.get_all_books", return_value=fake_books)
+    mocker.patch("tests.test_cases.get_all_books", return_value=fake_books)
 
-    books = get_all_books()
+    # call the patched service version, NOT the imported one
+    from services import library_service
+    books = library_service.get_all_books()
     assert len(books) > 0
 
 def test_catalog_fields_present():
