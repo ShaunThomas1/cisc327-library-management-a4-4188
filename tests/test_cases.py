@@ -238,11 +238,42 @@ def test_borrow_unavailable_book(mocker):
 
 
 
-def test_borrow_over_limit():
-    # try to borrow more than 5 books for the same patron
+# def test_borrow_over_limit():
+#     # try to borrow more than 5 books for the same patron
+#     for _ in range(5):
+#         borrow_book_by_patron("654321", 1)
+#     success, msg = borrow_book_by_patron("654321", 2)
+#     assert success is False
+#     assert "limit" in msg.lower()
+
+def test_borrow_over_limit(mocker):
+    # Always return 1 valid book
+    fake_book = {
+        "id": 1,
+        "title": "X",
+        "author": "Y",
+        "isbn": "111",
+        "total_copies": 5,
+        "available_copies": 5
+    }
+
+    # Patch DB dependencies INSIDE services.library_service
+    mocker.patch("services.library_service.get_book_by_id", return_value=fake_book)
+    mocker.patch("services.library_service.insert_borrow_record", return_value=True)
+    mocker.patch("services.library_service.update_book_availability", return_value=True)
+
+    # First 5 calls should behave like successful borrows
+    # Simulate borrow count increasing each time
+    mocker.patch("services.library_service.get_patron_borrow_count",
+                 side_effect=[0, 1, 2, 3, 4, 5])
+
+    # First 5 calls — OK
     for _ in range(5):
         borrow_book_by_patron("654321", 1)
-    success, msg = borrow_book_by_patron("654321", 2)
+
+    # 6th call → limit reached
+    success, msg = borrow_book_by_patron("654321", 1)
+
     assert success is False
     assert "limit" in msg.lower()
 
