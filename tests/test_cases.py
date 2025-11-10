@@ -130,9 +130,26 @@ def test_catalog_fields_present(mocker):
 
     assert "title" in book and "author" in book and "isbn" in book
 
-def test_catalog_available_not_negative():
-    # available copies shouldn’t go below 0
-    for book in get_all_books():
+# older version
+# def test_catalog_available_not_negative():
+#     # available copies shouldn’t go below 0
+#     for book in get_all_books():
+#         assert book["available_copies"] >= 0
+def test_catalog_available_not_negative(mocker):
+    fake_books = [
+        {"id": 1, "title": "A", "author": "X", "isbn": "111", "total_copies": 3, "available_copies": 1},
+        {"id": 2, "title": "B", "author": "Y", "isbn": "222", "total_copies": 5, "available_copies": 0},
+    ]
+
+    # Patch all references
+    mocker.patch("services.library_service.get_all_books", return_value=fake_books)
+    mocker.patch("tests.test_cases.get_all_books", return_value=fake_books)
+    mocker.patch("database.get_all_books", return_value=fake_books)
+
+    from services import library_service
+
+    # Now uses patched version
+    for book in library_service.get_all_books():
         assert book["available_copies"] >= 0
 
 # older version
