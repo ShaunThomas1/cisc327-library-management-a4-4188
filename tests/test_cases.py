@@ -193,7 +193,6 @@ def test_catalog_available_not_exceed_total(mocker):
 #     assert isinstance(msg, str)
 
 def test_borrow_valid_book(mocker):
-    # Fake DB row for a valid book
     fake_book = {
         "id": 1,
         "title": "X",
@@ -203,23 +202,22 @@ def test_borrow_valid_book(mocker):
         "available_copies": 1
     }
 
-    # Patch ONLY the DB dependencies called inside borrow_book_by_patron
-    mocker.patch("database.get_patron_borrow_count", return_value=0)
-    mocker.patch("database.get_book_by_id", return_value=fake_book)
-    mocker.patch("database.insert_borrow_record", return_value=True)
-    mocker.patch("database.update_book_availability", return_value=True)
+    # Patch *inside library_service* because that is where the functions were imported
+    mocker.patch("services.library_service.get_patron_borrow_count", return_value=0)
+    mocker.patch("services.library_service.get_book_by_id", return_value=fake_book)
+    mocker.patch("services.library_service.insert_borrow_record", return_value=True)
+    mocker.patch("services.library_service.update_book_availability", return_value=True)
 
-    # NOW call the actual function
     success, msg = borrow_book_by_patron("123456", 1)
 
     assert success is True
     assert isinstance(msg, str)
 
-# def test_borrow_invalid_patron_id():
-#     # patron id not 6 digits → reject
-#     success, msg = borrow_book_by_patron("12", 1)
-#     assert success is False
-#     assert "patron" in msg.lower()
+def test_borrow_invalid_patron_id():
+    # patron id not 6 digits → reject
+    success, msg = borrow_book_by_patron("12", 1)
+    assert success is False
+    assert "patron" in msg.lower()
 
 # older version
 # def test_borrow_unavailable_book():
