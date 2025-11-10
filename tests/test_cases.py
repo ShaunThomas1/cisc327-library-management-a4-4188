@@ -193,7 +193,7 @@ def test_catalog_available_not_exceed_total(mocker):
 #     assert isinstance(msg, str)
 
 def test_borrow_valid_book(mocker):
-    # Fake DB rows
+    # Fake DB row for a valid book
     fake_book = {
         "id": 1,
         "title": "X",
@@ -203,22 +203,17 @@ def test_borrow_valid_book(mocker):
         "available_copies": 1
     }
 
-    # Patch all DB functions used inside borrow_book_by_patron
+    # Patch ONLY the DB dependencies called inside borrow_book_by_patron
     mocker.patch("database.get_patron_borrow_count", return_value=0)
     mocker.patch("database.get_book_by_id", return_value=fake_book)
     mocker.patch("database.insert_borrow_record", return_value=True)
     mocker.patch("database.update_book_availability", return_value=True)
 
-    # Also patch test import reference
-    mocker.patch("tests.test_cases.get_patron_borrow_count", return_value=0)
-    mocker.patch("tests.test_cases.get_book_by_id", return_value=fake_book)
-
-    # Call the real function
+    # NOW call the actual function
     success, msg = borrow_book_by_patron("123456", 1)
 
-    assert isinstance(success, bool)
-    assert isinstance(msg, str)
     assert success is True
+    assert isinstance(msg, str)
 
 # def test_borrow_invalid_patron_id():
 #     # patron id not 6 digits → reject
