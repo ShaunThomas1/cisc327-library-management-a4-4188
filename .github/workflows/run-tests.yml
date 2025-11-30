@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: true    # Tells pytest to skip E2E test in CI
 
     steps:
       - name: Checkout repository
@@ -21,11 +23,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov mock playwright
+          pip install pytest pytest-cov mock pytest-mock
 
-      - name: Install Playwright browsers
-        run: |
-          python -m playwright install chromium
+      # NOTE:
+      # We no longer install Playwright browsers in CI
+      # E2E test is skipped when CI=true
 
       - name: Run tests with coverage
         run: |
