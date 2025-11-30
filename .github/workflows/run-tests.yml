@@ -23,6 +23,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov mock
 
+      - name: Install Playwright and Chromium
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
       - name: Run tests with coverage
         run: |
           pytest --maxfail=1 --disable-warnings --cov=services --cov-report=xml
