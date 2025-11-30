@@ -2,7 +2,7 @@
 
 ## Overview
 
-[![Python application test](https://github.com/ShaunThomas1/cisc327-library-management-a2-4188/actions/workflows/python-app.yml/badge.svg)](https://github.com/ShaunThomas1/cisc327-library-management-a2-4188/actions/workflows/python-app.yml)
+[![Tests](https://github.com/ShaunThomas1/cisc327-library-management-a4-4188/actions/workflows/run-tests.yml/badge.svg)](https://github.com/ShaunThomas1/cisc327-library-management-a4-4188/actions/workflows/run-tests.yml)
 
 [![codecov](https://codecov.io/gh/ShaunThomas1/cisc327-library-management-a3-4188/branch/main/graph/badge.svg)](https://codecov.io/gh/ShaunThomas1/cisc327-library-management-a3-4188)
 
