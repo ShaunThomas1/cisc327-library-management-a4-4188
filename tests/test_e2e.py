@@ -3,13 +3,6 @@ from playwright.sync_api import sync_playwright
 import threading
 import time
 from app import create_app
-import os 
-
-# Skip this test automatically in CI (GitHub Actions)
-pytestmark = pytest.mark.skipif(
-    os.environ.get("CI") == "true",
-    reason="Skipping E2E test in CI; Playwright browsers are not installed"
-)
 
 # -------------------------------------------------------------------
 # Start Flask Server in Background
